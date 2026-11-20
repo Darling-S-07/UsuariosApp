@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UsuariosApp.ViewModels"
+             x:Class="UsuariosApp.Views.UsuarioDetallePage"
+             x:DataType="vm:UsuarioDetalleViewModel"
+             Title="Detalle del usuario">
+
+    <ContentPage.Resources>
+        <Style x:Key="Etiqueta" TargetType="Label">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light=#666666, Dark=#AAAAAA}" />
+        </Style>
+        <Style x:Key="Valor" TargetType="Label">
+            <Setter Property="FontSize" Value="17" />
+            <Setter Property="Margin" Value="0,0,0,14" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <ScrollView IsVisible="{Binding TieneUsuario}">
+            <VerticalStackLayout Padding="24" Spacing="2">
+
+                <!-- Avatar con la inicial del nombre -->
+                <Border WidthRequest="80"
+                        HeightRequest="80"
+                        HorizontalOptions="Center"
+                        Margin="0,0,0,24"
+                        StrokeThickness="0"
+                        BackgroundColor="{StaticResource Primary}">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="40" />
+                    </Border.StrokeShape>
+                    <Label Text="{Binding Inicial}"
+                           FontSize="34"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <Label Text="ID" Style="{StaticResource Etiqueta}" />
+                <Label Text="{Binding UsuarioActual.Id}" Style="{StaticResource Valor}" />
+
+                <Label Text="Nombre" Style="{StaticResource Etiqueta}" />
+                <Label Text="{Binding UsuarioActual.Name}" Style="{StaticResource Valor}" />
+
+                <Label Text="Correo" Style="{StaticResource Etiqueta}" />
+                <Label Text="{Binding UsuarioActual.Email}" Style="{StaticResource Valor}" />
+
+                <Label Text="Teléfono" Style="{StaticResource Etiqueta}" />
+                <Label Text="{Binding UsuarioActual.Phone}" Style="{StaticResource Valor}" />
+
+                <Label Text="Sitio web" Style="{StaticResource Etiqueta}" />
+                <Label Text="{Binding UsuarioActual.Website}" Style="{StaticResource Valor}" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Si falló la carga y no hay datos guardados -->
+        <VerticalStackLayout IsVisible="{Binding MostrarReintentar}"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             Spacing="12"
+                             Padding="24">
+            <Label Text="No se pudo cargar el usuario."
+                   HorizontalTextAlignment="Center" />
+            <Button Text="Reintentar"
+                    Command="{Binding ReintentarCommand}"
+                    HorizontalOptions="Center" />
+        </VerticalStackLayout>
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           WidthRequest="48"
+                           HeightRequest="48" />
+    </Grid>
+</ContentPage>

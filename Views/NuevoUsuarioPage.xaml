@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UsuariosApp.ViewModels"
+             x:Class="UsuariosApp.Views.NuevoUsuarioPage"
+             x:DataType="vm:NuevoUsuarioViewModel"
+             Title="Nuevo usuario">
+
+    <ContentPage.Resources>
+        <Style x:Key="Etiqueta" TargetType="Label">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light=#666666, Dark=#AAAAAA}" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="6">
+
+            <Label Text="Nombre *" Style="{StaticResource Etiqueta}" />
+            <Entry Text="{Binding Name}"
+                   Placeholder="Ej. Ana López"
+                   ReturnType="Next" />
+
+            <Label Text="Correo *" Style="{StaticResource Etiqueta}" Margin="0,8,0,0" />
+            <Entry Text="{Binding Email}"
+                   Placeholder="ana@correo.com"
+                   Keyboard="Email"
+                   ReturnType="Next" />
+
+            <Label Text="Teléfono" Style="{StaticResource Etiqueta}" Margin="0,8,0,0" />
+            <Entry Text="{Binding Phone}"
+                   Placeholder="504 9999-9999"
+                   Keyboard="Telephone"
+                   ReturnType="Next" />
+
+            <Label Text="Sitio web" Style="{StaticResource Etiqueta}" Margin="0,8,0,0" />
+            <Entry Text="{Binding Website}"
+                   Placeholder="ejemplo.com"
+                   Keyboard="Url"
+                   ReturnType="Done" />
+
+            <Button Text="Enviar usuario (POST)"
+                    Margin="0,20,0,0"
+                    Command="{Binding EnviarCommand}"
+                    IsEnabled="{Binding IsNotBusy}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               HorizontalOptions="Center"
+                               HeightRequest="40"
+                               WidthRequest="40" />
+
+            <!-- Resultado del POST -->
+            <Border IsVisible="{Binding MostrarResultado}"
+                    Margin="0,16,0,0"
+                    Padding="16"
+                    StrokeThickness="1"
+                    Stroke="{StaticResource Primary}"
+                    BackgroundColor="{AppThemeBinding Light=#F4F0FF, Dark=#2A2342}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Usuario creado correctamente"
+                           FontAttributes="Bold"
+                           FontSize="16" />
+                    <Label Text="{Binding UsuarioCreado.Id, StringFormat='Id devuelto por la API: {0}'}"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Primary}" />
+                    <Label Text="{Binding UsuarioCreado.Name, StringFormat='Nombre: {0}'}" />
+                    <Label Text="{Binding UsuarioCreado.Email, StringFormat='Correo: {0}'}" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

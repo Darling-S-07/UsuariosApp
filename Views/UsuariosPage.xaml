@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:UsuariosApp.Models"
+             xmlns:vm="clr-namespace:UsuariosApp.ViewModels"
+             x:Class="UsuariosApp.Views.UsuariosPage"
+             x:DataType="vm:UsuariosViewModel"
+             Title="Usuarios">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Nuevo" Command="{Binding NuevoUsuarioCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <Grid>
+        <!-- Deslizar hacia abajo para actualizar -->
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
+
+            <CollectionView ItemsSource="{Binding Usuarios}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding UsuarioSeleccionado, Mode=TwoWay}"
+                            SelectionChangedCommand="{Binding VerDetalleCommand}">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Usuario">
+                        <Border Margin="12,6"
+                                Padding="14"
+                                StrokeThickness="1"
+                                Stroke="{AppThemeBinding Light=#DDDDDD, Dark=#444444}"
+                                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="{Binding Name}"
+                                       FontSize="17"
+                                       FontAttributes="Bold" />
+                                <Label Text="{Binding Email}"
+                                       FontSize="14" />
+                                <Label Text="{Binding Phone}"
+                                       FontSize="13"
+                                       TextColor="{AppThemeBinding Light=#666666, Dark=#AAAAAA}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <!-- Estado vacío (por ejemplo, si falló la carga y no hay datos guardados) -->
+        <VerticalStackLayout IsVisible="{Binding MostrarVacio}"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             Spacing="12"
+                             Padding="24">
+            <Label Text="No hay usuarios para mostrar."
+                   HorizontalTextAlignment="Center" />
+            <Button Text="Reintentar"
+                    Command="{Binding CargarCommand}"
+                    HorizontalOptions="Center" />
+        </VerticalStackLayout>
+
+        <!-- Indicador de carga (carga inicial / reintento) -->
+        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           WidthRequest="48"
+                           HeightRequest="48" />
+    </Grid>
+</ContentPage>
